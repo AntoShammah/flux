@@ -13,6 +13,7 @@
     "react-dom": "latest",
     "lucide-react": "latest",
     "tailwind-merge": "latest",
+    "tailwindcss": "latest",
     "clsx": "latest"
   },
   "devDependencies": {
