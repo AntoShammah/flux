@@ -1,49 +1,92 @@
-import React from 'react';
-import Link from 'next/link';
-import { Sparkles, Activity, Terminal, ChevronRight } from 'lucide-react';
+"use client";
 
-export default function FluxLauncher() {
+import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { Terminal, ChevronLeft, Zap, ShieldCheck } from 'lucide-react';
+
+export default function SpecialistTerminal() {
+  const [input, setInput] = useState('');
+  const [history, setHistory] = useState([
+    { role: 'system', text: 'FLUX ENGINE v1.0.0 - CORE_LOADED' },
+    { role: 'ai', text: 'Specialist environment active. Protocol: Natural Language to API.' },
+    { role: 'ai', text: 'How can I assist your workflow today?' }
+  ]);
+  
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [history]);
+
+  const handleCommand = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    setHistory([...history, { role: 'user', text: input }]);
+    const currentInput = input;
+    setInput('');
+
+    setTimeout(() => {
+      setHistory(prev => [...prev, { 
+        role: 'ai', 
+        text: `Flux analyzed "${currentInput}". Action: GET /api/v1/status. Execution pending.` 
+      }]);
+    }, 600);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-slate-900 font-sans">
-      {/* Background Decoration */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500"></div>
-      
-      <header className="text-center mb-16 animate-in fade-in slide-in-from-top duration-1000">
-        <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 border border-blue-100 rounded-full">
-          <Sparkles className="w-3 h-3" /> The Pilot v1.0
+    <div className="min-h-screen bg-black text-emerald-500 font-mono p-4 flex flex-col">
+      {/* Header */}
+      <header className="flex justify-between items-center border-b border-emerald-900/30 pb-4 mb-4">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="text-emerald-900 hover:text-emerald-500">
+            <ChevronLeft className="w-5 h-5" />
+          </Link>
+          <div className="flex items-center gap-2">
+            <Terminal className="w-4 h-4" />
+            <span className="text-xs font-bold uppercase">Flux // Specialist_Mode</span>
+          </div>
         </div>
-        <h1 className="text-7xl font-black tracking-tighter mb-4 bg-gradient-to-b from-slate-950 to-slate-600 bg-clip-text text-transparent">
-          Flux
-        </h1>
-        <p className="text-slate-500 text-xl max-w-lg mx-auto leading-relaxed font-light">
-          Liquifying API complexity. Talk to your data through natural conversation.
-        </p>
+        <div className="flex items-center gap-4 text-[10px] uppercase text-emerald-900">
+          <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3"/> Encrypted</span>
+          <span className="text-emerald-600 italic tracking-widest">System_Live</span>
+        </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full">
-        {/* Style 1: The Modernist */}
-        <div className="group relative border border-slate-200 p-8 rounded-3xl hover:border-blue-500 transition-all duration-500 bg-white shadow-sm hover:shadow-xl hover:-translate-y-2">
-          <div className="mb-6 bg-blue-50 w-12 h-12 rounded-2xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-            <Activity className="w-6 h-6" />
+      {/* Output */}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto space-y-2 mb-6">
+        {history.map((msg, i) => (
+          <div key={i} className="flex gap-3">
+            <span className={msg.role === 'ai' ? 'text-blue-500' : 'text-emerald-800'}>
+              {msg.role === 'ai' ? '❖' : '>'}
+            </span>
+            <p className={msg.role === 'system' ? 'text-yellow-600 italic' : ''}>
+              {msg.text}
+            </p>
           </div>
-          <h2 className="text-2xl font-bold mb-2">The Modernist</h2>
-          <p className="text-slate-500 text-sm mb-8 leading-relaxed">Clean, card-based chat for streamlined daily interactions.</p>
-          <button className="flex items-center gap-2 text-sm font-bold text-blue-600 group-hover:gap-4 transition-all uppercase tracking-widest">
-            Enter Flow <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+        ))}
+      </div>
 
-        {/* Style 2: The Analyst */}
-        <div className="group relative border border-slate-200 p-8 rounded-3xl hover:border-emerald-500 transition-all duration-500 bg-white shadow-sm hover:shadow-xl hover:-translate-y-2">
-          <div className="mb-6 bg-emerald-50 w-12 h-12 rounded-2xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <h2 className="text-2xl font-bold mb-2">The Analyst</h2>
-          <p className="text-slate-500 text-sm mb-8 leading-relaxed">Dual-pane power view for deep JSON exploration and chat.</p>
-          <button className="flex items-center gap-2 text-sm font-bold text-emerald-600 group-hover:gap-4 transition-all uppercase tracking-widest">
-            Enter Flow <ChevronRight className="w-4 h-4" />
-          </button>
+      {/* Input */}
+      <div className="border-t border-emerald-900/30 pt-6">
+        <form onSubmit={handleCommand} className="flex items-center gap-3 bg-emerald-950/20 p-4 rounded-lg border border-emerald-900/20">
+          <span className="text-emerald-500">$</span>
+          <input 
+            className="bg-transparent border-none outline-none w-full text-emerald-400"
+            placeholder="Awaiting command..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            autoFocus
+          />
+        </form>
+        
+        <div className="mt-8 flex justify-center">
+          <p className="text-[10px] text-emerald-900 font-medium uppercase tracking-[0.4em]">
+            crafted with ♡모 by <span className="text-emerald-700 font-black">Anto Shammah</span>
+          </p>
         </div>
-
-        {/* Style 3: The Specialist */}
-        <Link href="/specialist" className="group relative border border-slate-200 p-8 rounded-3xl hover:border-slate-900 transition-all duration-500 bg-white shadow-sm hover:shadow-xl hover:-translate-y-2
+      </div>
+    </div>
+  );
+}
