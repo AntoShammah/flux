@@ -1,19 +1,14 @@
 import './globals.css';
-import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Flux | API Oracle',
-  description: 'Liquifying API complexity - crafted with ♡모 by Anto Shammah',
+  description: 'crafted with ♡모 by Anto Shammah',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
