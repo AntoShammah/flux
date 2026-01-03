@@ -1,9 +1,24 @@
 @import "tailwindcss";
 
-/* That's it! Next.js 16 handles the rest automatically. */
+@theme {
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+:root {
+  background-color: #0a0a0a;
+}
 
 body {
-  background-color: black;
-  color: #10b981; /* emerald-500 */
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background-color: #0a0a0a;
+  color: #10b981;
+}
+
+/* Custom animation for the Flux Engine */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite;
 }
