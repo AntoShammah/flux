@@ -1,13 +1,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Acknowledges Turbopack to silence configuration conflicts
-  turbopack: {},
-  // Optional: If you are on an earlier Next.js 16 build, use:
-  // experimental: { turbo: {} },
-  
-  // Forces module resolution for icons and CSS
-  webpack: (config) => {
-    config.resolve.fallback = { fs: false, net: false, tls: false };
+  // Disable Turbopack for this specific build to use the Webpack fix below
+  experimental: {
+    turbo: {
+      rules: {
+        // Ensures CSS is handled correctly in the new engine
+        '*.css': ['postcss-loader'],
+      },
+    },
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // This stops the "Can't resolve 'module'" and 'fs' errors in the browser
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        module: false,
+        fs: false,
+        path: false,
+        os: false,
+        crypto: false,
+      };
+    }
     return config;
   },
 };
