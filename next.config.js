@@ -1,24 +1,30 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Disable Turbopack for this specific build to use the Webpack fix below
+  // Turbopack specific configuration for Next.js 16
   experimental: {
     turbo: {
-      rules: {
-        // Ensures CSS is handled correctly in the new engine
-        '*.css': ['postcss-loader'],
+      resolveAlias: {
+        // This stops Turbopack from trying to find Node modules in the browser
+        fs: 'empty',
+        path: 'empty',
+        os: 'empty',
+        crypto: 'empty',
+        perf_hooks: 'empty',
+        module: 'empty',
       },
     },
   },
+  // Webpack fallback for standard builds
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      // This stops the "Can't resolve 'module'" and 'fs' errors in the browser
       config.resolve.fallback = {
         ...config.resolve.fallback,
-        module: false,
         fs: false,
         path: false,
         os: false,
         crypto: false,
+        perf_hooks: false,
+        module: false,
       };
     }
     return config;
