@@ -8,17 +8,20 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "next": "16.1.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "lucide-react": "latest",
-    "tailwindcss": "3.4.17"
+    "clsx": "latest",
+    "tailwind-merge": "latest",
+    "tailwindcss": "3.4.17",
+    "postcss": "^8",
+    "autoprefixer": "^10"
   },
   "devDependencies": {
     "typescript": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
-    "postcss": "^8",
-    "autoprefixer": "^10"
+    "@types/react-dom": "latest"
   }
 }
